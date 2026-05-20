@@ -95,3 +95,42 @@ print(f"CAGR              : {cagr:.2%}")
 print(f"Final Return      : {(df['Cumulative_Strategy'].iloc[-1] - 1):.2%}")
 print(f"Buy & Hold Return : {(df['Cumulative_Market'].iloc[-1] - 1):.2%}")
 print("=" * 40)
+
+# ---- BROKERAGE COST SIMULATION ----
+
+# STT (Securities Transaction Tax) charged by SEBI on sell side only for equity delivery
+# Current rate: 0.1% of transaction value on sell
+STT_RATE = 0.001
+
+# Exchange transaction charges (NSE charges approx 0.00325% per trade)
+EXCHANGE_CHARGE = 0.0000325
+
+# SEBI turnover fee (0.0001% per trade)
+SEBI_FEE = 0.000001
+
+# Brokerage: assume flat Rs 20 per order (Zerodha/discount broker model)
+# We divide by average NIFTY price to convert to percentage
+avg_price = df['Close'].mean()
+BROKERAGE = 20 / avg_price
+
+# Total cost per trade (buy + sell combined)
+TOTAL_COST_PER_TRADE = (STT_RATE + EXCHANGE_CHARGE + SEBI_FEE + BROKERAGE) * 2
+
+# Count total number of trades (each buy signal = 1 trade)
+num_trades = len(buy_signals)
+
+# Calculate total cost drag on returns
+total_cost_drag = TOTAL_COST_PER_TRADE * num_trades
+
+# Adjust final strategy return after brokerage costs
+adjusted_return = (df['Cumulative_Strategy'].iloc[-1] - 1) - total_cost_drag
+
+print("=" * 40)
+print("AFTER BROKERAGE COSTS (Sharekhan Model)")
+print("=" * 40)
+print(f"Cost per trade     : {TOTAL_COST_PER_TRADE:.4%}")
+print(f"Total trades       : {num_trades}")
+print(f"Total cost drag    : {total_cost_drag:.4%}")
+print(f"Return before costs: {(df['Cumulative_Strategy'].iloc[-1] - 1):.2%}")
+print(f"Return after costs : {adjusted_return:.2%}")
+print("=" * 40)
