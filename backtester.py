@@ -134,3 +134,43 @@ print(f"Total cost drag    : {total_cost_drag:.4%}")
 print(f"Return before costs: {(df['Cumulative_Strategy'].iloc[-1] - 1):.2%}")
 print(f"Return after costs : {adjusted_return:.2%}")
 print("=" * 40)
+
+# ---- CUMULATIVE RETURNS CHART ----
+
+# Plot strategy returns vs simply buying and holding NIFTY50
+plt.figure(figsize=(14, 6))
+
+# Plot buy and hold cumulative return in dark blue
+plt.plot(df['Cumulative_Market'], 
+         color='#1A1A2E', linewidth=1.5, label='Buy & Hold NIFTY50')
+
+# Plot strategy cumulative return in amber
+plt.plot(df['Cumulative_Strategy'], 
+         color='#D97706', linewidth=1.5, label='MA Crossover Strategy')
+
+# Add a horizontal line at 1.0 representing starting capital (no gain no loss)
+plt.axhline(y=1.0, color='#6B7280', linewidth=0.8, linestyle='--', label='Starting Capital')
+
+# Shade the area under strategy curve to make it visually clear
+plt.fill_between(df.index, df['Cumulative_Strategy'], 1, 
+                 alpha=0.1, color='#D97706')
+
+# Add annotations showing final returns
+plt.annotate(f"Strategy: {(df['Cumulative_Strategy'].iloc[-1]-1):.1%}", 
+             xy=(df.index[-1], df['Cumulative_Strategy'].iloc[-1]),
+             xytext=(-120, 10), textcoords='offset points',
+             color='#D97706', fontsize=10, fontweight='bold')
+
+plt.annotate(f"Buy & Hold: {(df['Cumulative_Market'].iloc[-1]-1):.1%}", 
+             xy=(df.index[-1], df['Cumulative_Market'].iloc[-1]),
+             xytext=(-120, 10), textcoords='offset points',
+             color='#1A1A2E', fontsize=10, fontweight='bold')
+
+# Labels and formatting
+plt.title('Strategy vs Buy & Hold — Cumulative Returns (2023–2024)')
+plt.xlabel('Date')
+plt.ylabel('Growth of ₹1 Invested')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
