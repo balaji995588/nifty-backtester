@@ -1,5 +1,9 @@
 # Algorithmic Trading Backtester — NIFTY50 & BTC/USDT
 
+## Demo
+[▶ Watch 3-minute project walkthrough](https://www.loom.com/share/b08fda1140224313ac09f469b0ba37a8)
+
+---
 A Python-based algorithmic trading backtester that implements a Moving Average 
 Crossover strategy on real market data. Built from scratch using live data APIs 
 — no paid subscriptions required.
