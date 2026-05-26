@@ -191,3 +191,23 @@ plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
 plt.show()
+
+# ---- CHART 3: RSI VALUES ----
+
+plt.figure(figsize=(14, 6))
+
+# All three lines: buy and hold, original strategy, RSI filtered strategy
+plt.plot(df['RSI'],
+         color='#1A1A2E', linewidth=1.5, label='RSI (14-day)')
+
+# Starting capital line
+plt.axhline(y=70, color="#F00E1A", linewidth=0.8, linestyle='-', label='OverBought Level')
+plt.axhline(y=30, color="#15F00E", linewidth=0.8, linestyle='-', label='OverSold Level')
+
+plt.title('NIFTY50 RSI (14-day)')
+plt.xlabel('Date')
+plt.ylabel('RSI Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
