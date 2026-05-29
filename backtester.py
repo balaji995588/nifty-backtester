@@ -57,6 +57,9 @@ sell_signals = df[df['Crossover'] == -1]
 buy_signals_rsi = df[df['Crossover_RSI'] == 1]
 sell_signals_rsi = df[df['Crossover_RSI'] == -1]
 
+difference_in_signals = buy_signals.index.difference(buy_signals_rsi.index);
+difference=df.loc[difference_in_signals];
+
 # Calculate cumulative returns for both strategies
 df['Cumulative_Market'] = (1 + df['Market_Return']).cumprod()
 df['Cumulative_Strategy'] = (1 + df['Strategy_Return']).cumprod()
@@ -207,6 +210,27 @@ plt.axhline(y=30, color="#15F00E", linewidth=0.8, linestyle='-', label='OverSold
 plt.title('NIFTY50 RSI (14-day)')
 plt.xlabel('Date')
 plt.ylabel('RSI Value')
+plt.legend()
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+
+# ---- CHART 4: SIGNALS FILTERED OUT BY RSI ----
+plt.figure(figsize=(14, 6))
+plt.plot(df['Close'], color='#1A1A2E', linewidth=1.2, label='NIFTY50 Close')
+
+# SMA lines
+plt.plot(df['SMA20'], color='#D97706', linewidth=1.2, label='SMA 20', linestyle='--')
+plt.plot(df['SMA50'], color='#059669', linewidth=1.2, label='SMA 50', linestyle='--')
+
+# Original buy/sell signals
+plt.scatter(difference.index, difference['Close'],
+            marker='^', color="#A8290698", s=120, zorder=5, label='Signals Filtered Out by RSI')
+
+plt.title('SMA Crossover Signals that were filtered out by RSI (2023–2024)')
+plt.xlabel('Date')
+plt.ylabel('Price (INR)')
 plt.legend()
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
