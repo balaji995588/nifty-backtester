@@ -16,6 +16,9 @@ Crossover strategy on real market data. Built from scratch using live data APIs
 - Calculates real performance metrics: Sharpe Ratio, Max Drawdown, CAGR
 - Simulates real brokerage costs including STT, exchange charges, and SEBI fees
 - Compares strategy returns against a simple buy and hold benchmark
+- RSI indicator as overbought/oversold filter
+- MACD indicator with colored histogram visualization  
+- 4-strategy comparison: SMA Crossover, RSI Filtered, MACD, Combined SMA+MACD
 
 ## Results
 
@@ -37,6 +40,15 @@ Crossover strategy on real market data. Built from scratch using live data APIs
 | Strategy Return | 48.90% |
 | Buy & Hold Return | 149.99% |
 
+### Strategy Comparison (NIFTY50 2023–2024)
+| Strategy | Sharpe | Max Drawdown | CAGR | Return |
+|--------|-------|-------|-------|-------|
+| Buy & Hold | — | — | — | ~37% |
+| SMA Crossover | 1.16 | -8.34% | 12.50% | 23.61% |
+| RSI Filtered | 1.15 | -6.91% | 11.42% | — |
+| MACD | 0.17 | — | — | 1.10% |
+| Combined SMA+MACD | 0.26 | -9.24% | 1.61% | — |
+
 ### Key Insight
 NIFTY50 delivered better risk-adjusted returns (Sharpe 1.16 vs 1.01) with 
 significantly lower drawdown (-8.34% vs -26.50%). BTC offered higher raw 
@@ -47,6 +59,12 @@ Both strategies underperformed buy and hold during the 2023-2024 bull markets,
 which is expected behavior for MA crossover strategies in strong trending 
 conditions. The strategy's strength is capital protection during downturns, 
 not maximising bull market gains.
+
+Combining multiple indicators does not automatically improve performance. 
+MACD generated 20 signals versus 4 for SMA crossover, but returned only 
+1.10% due to whipsawing in trending conditions. The simplest strategy 
+(SMA crossover) outperformed all complex combinations — demonstrating that 
+signal quality matters more than signal quantity.
 
 ## Brokerage Cost Simulation (India-Specific)
 The NIFTY backtester includes real Indian market transaction costs:
@@ -79,6 +97,9 @@ nifty-backtester/
 │
 ├── backtester.py          # NIFTY50 MA crossover strategy + performance metrics
 ├── crypto_backtester.py   # BTC/USDT strategy via Binance API
+|── macd_strategy.py       # MACD indicator with dual subplot visualization
+|── combined_strategy.py   # Multi-indicator strategy comparison
+|── strategy_comparison.py # All 4 strategies cumulative returns chart
 └── README.md              # This file
 
 ## About
@@ -88,7 +109,8 @@ Domain knowledge from brokerage infrastructure informs the realistic
 cost simulation model.
 
 ## What's Next
-- RSI indicator as signal filter
-- Walk-forward optimisation to avoid overfitting
-- Zerodha Kite / Sharekhan API integration for live paper trading
+- Zerodha/Sharekhan API integration for live paper trading
 - Machine learning signal generation (Random Forest on OHLCV features)
+- Walk-forward optimisation to avoid overfitting
+- Rust implementation of core data pipeline for latency benchmarking
+
